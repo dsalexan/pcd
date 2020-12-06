@@ -1,0 +1,11 @@
+{
+  "clang-format.executable1": "/mnt/c/Users/dsale/.vscode/extensions/xaver.clang-format-1.9.0/.clang-format",
+  "C_Cpp.clang_format_path1": "/mnt/c/Users/dsale/.vscode/extensions/xaver.clang-format-1.9.0/.clang-format",
+  "files.associations": {
+    "*.tcc": "cpp",
+    "array": "cpp",
+    "string_view": "cpp",
+    "initializer_list": "cpp",
+    "utility": "cpp"
+  }
+}
