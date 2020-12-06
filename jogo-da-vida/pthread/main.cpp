@@ -6,7 +6,7 @@
 #include "Grid.cpp"
 
 #define SEED 1985
-#define NUM_THREADS 4
+#define NUM_THREADS 8
 
 typedef struct {
   int size;
@@ -96,7 +96,7 @@ int main() {
     gridAdvanceGeneration(&grid);
   }
 
-  printf("GEN %d           %d\n", k, gridCount(grid));
+  printf("GEN %d           %d\n", k-1, gridCount(grid));
 
   gettimeofday(&end, NULL);
   ellapsed = (int) (1000 * (end.tv_sec - start.tv_sec) + (end.tv_usec - start.tv_usec) / 1000);
