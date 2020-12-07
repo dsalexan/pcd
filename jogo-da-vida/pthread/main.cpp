@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
+#include <fstream>
 #include <sys/time.h>
 
 #include "Grid.cpp"
@@ -59,6 +60,7 @@ int main() {
   Grid grid;
 
   srand(SEED);
+
   // initialize and prepare grid
   gridInitialize(&grid, N);
   gridRandomize(&grid);
@@ -71,6 +73,17 @@ int main() {
   printf("\n");
 
   printf("GEN 0              %d\n", gridCount(grid));
+  
+  std::ofstream file;
+  file.open ("pthread_" + std::to_string(N) + "_" + std::to_string(NUM_GENERATIONS) + "_" + std::to_string(NUM_THREADS) + ".csv");
+   
+  file << "(pthread)\n\n";
+  file << "NUM_THREADS        " << NUM_THREADS << '\n';
+  file << "NUM_GENERATIONS    " << NUM_GENERATIONS << '\n';
+  file << "N                  " << N << '\n';
+  file << "SEED               " << SEED << '\n';
+  file << "\n";
+
   gettimeofday(&start, NULL);
 
 	int k;
@@ -78,6 +91,9 @@ int main() {
     int i;
     pthread_t workers[NUM_THREADS];
     arguments arg[NUM_THREADS];
+    
+    struct timeval localStart, localEnd;
+    gettimeofday(&localStart, NULL);
 
     for (i = 0; i < NUM_THREADS; i++) { // break calculations in clusters
       arg[i].size = grid.size;
@@ -94,14 +110,21 @@ int main() {
 
     // next generation
     gridAdvanceGeneration(&grid);
+
+    int localCount = gridCount(grid);
+    gettimeofday(&localEnd, NULL);
+    float localElapsed = (int) (1000 * (localEnd.tv_sec - start.tv_sec) + (localEnd.tv_usec - start.tv_usec) / 1000);
+
+    // printf("GEN %d           %d        %.0f\n", k+1, localCount, localElapsed);
+    file << localCount << "," << localElapsed << "\n";
   }
 
-  printf("GEN %d           %d\n", k-1, gridCount(grid));
+  printf("GEN %d           %d\n", k, gridCount(grid));
 
   gettimeofday(&end, NULL);
   ellapsed = (int) (1000 * (end.tv_sec - start.tv_sec) + (end.tv_usec - start.tv_usec) / 1000);
 
-  printf("ellapsed time: %.2f\n", ellapsed);
+  printf("elapsed time     %.2f\n", ellapsed);
 
   return 0;
 }

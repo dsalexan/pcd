@@ -1,2 +1,2 @@
 #!/bin/bash
-g++ -pthread main.cpp Grid.h -o jogo-da-vida_pthread.o
+g++ -O3 -pthread main.cpp Grid.h -o jogo-da-vida_pthread.o

@@ -23,14 +23,14 @@ public class Grid extends Thread {
     private void step() {
         int i, j;
         int start = this.thread * (this.size / this.NUM_THREADS),
-                end = start + (this.size / this.NUM_THREADS) - 1 + (i == this.NUM_THREADS - 1 && (this.size % this.NUM_THREADS));
+            end = start + (this.size / this.NUM_THREADS);
 
-        for (i = this.II; i <= this.FI; i++) {
-            for (j = IJ; j <= this.FJ; j++) {
-                int qtd = this.getNeighboorQuantity(i, j);
-                int HP = this.curGeneration[i][j] == 1 ? ((qtd == 2 || qtd == 3) ? 1 : 0) : ((qtd == 3) ? 1 : 0);
+        for (i = start; i < end; i++) {
+            for (j = 0; j < this.size; j++) {
+                int qtd = this.neighborhood(i, j);
+                int HP = this.generation[i][j] == 1 ? ((qtd == 2 || qtd == 3) ? 1 : 0) : ((qtd == 3) ? 1 : 0);
 
-                this.nextGeneration[i][j] = HP;
+                this.next[i][j] = HP;
             }
         }
     }
@@ -48,9 +48,9 @@ public class Grid extends Thread {
 
     static int count(int[][] generation) {
         int count = 0;
-        for (int x = 0; x < generation.length; x++) {
-            for (int y = 0; y < generation[x].length; y++) {
-                count = count + generation[x][y];
+        for (int[] row : generation) {
+            for (int cell : row) {
+                count += cell;
             }
         }
         return count;

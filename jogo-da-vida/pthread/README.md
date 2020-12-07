@@ -1,7 +1,7 @@
 # pthread
 
 ## Compile
-*g++ -pthread main.h Grid.gpp -o a*
+*g++ -O3 -pthread main.cpp Grid.h -o a*
 or
 *./compile.sh*
 
