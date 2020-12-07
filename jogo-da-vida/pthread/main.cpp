@@ -26,7 +26,7 @@ void* threadSimulate(void* _arg) {
 
   int i, j;
   int start = thread * (size / NUM_THREADS),
-      end = start + (size / NUM_THREADS) - 1 + (i == NUM_THREADS - 1 && (size % NUM_THREADS));
+      end = start + (size / NUM_THREADS) - 1 + (thread == NUM_THREADS - 1 && (size % NUM_THREADS));
 
   for (i = start; i <= end; i++) {
     for (j = 0; j <= size - 1; j++) {
