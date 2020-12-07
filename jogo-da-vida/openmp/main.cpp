@@ -43,7 +43,7 @@ int main() {
 
       int i, j;
       int start = thread * (grid.size / NUM_THREADS),
-          end = start + (grid.size / NUM_THREADS) - 1 + (i == NUM_THREADS - 1 && (grid.size % NUM_THREADS));
+          end = start + (grid.size / NUM_THREADS) - 1 + (thread == NUM_THREADS - 1 && (grid.size % NUM_THREADS));
 
       for (i = start; i <= end; i++) {
         for (j = 0; j <= grid.size - 1; j++) {
