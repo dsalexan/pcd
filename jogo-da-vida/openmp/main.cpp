@@ -4,18 +4,19 @@
 #include <sys/time.h>
 #include <omp.h>
 #include <iostream>
+#include <fstream>
 
 #include "Grid.cpp"
 
 #define SEED 1985
-#define NUM_THREADS 8
+#define NUM_THREADS 1
 
 int main() {
   int N = 2048;
   int NUM_GENERATIONS = 2000;
 
   struct timeval start, end;
-  float ellapsed = 0;
+  float elapsed = 0;
 
   Grid grid;
 
@@ -33,9 +34,25 @@ int main() {
   printf("\n");
 
   printf("GEN 0              %d\n", gridCount(grid));
+
+  
+  std::ofstream file;
+  file.open ("openmp_" + std::to_string(N) + "_" + std::to_string(NUM_GENERATIONS) + "_" + std::to_string(NUM_THREADS) + ".csv");
+   
+  file << "(openmp)\n\n";
+  file << "NUM_THREADS        " << NUM_THREADS << '\n';
+  file << "NUM_GENERATIONS    " << NUM_GENERATIONS << '\n';
+  file << "N                  " << N << '\n';
+  file << "SEED               " << SEED << '\n';
+  file << "\n";
+
+
   gettimeofday(&start, NULL);
 
   for (int k = 0; k < NUM_GENERATIONS; k++) { // for each generation
+    struct timeval localStart, localEnd;
+    gettimeofday(&localStart, NULL);
+
     // breack in threads
     #pragma omp parallel
     {
@@ -67,14 +84,21 @@ int main() {
 
     // next generation
     gridAdvanceGeneration(&grid);
+    
+    int localCount = gridCount(grid);
+    gettimeofday(&localEnd, NULL);
+    float localElapsed = (int) (1000 * (localEnd.tv_sec - start.tv_sec) + (localEnd.tv_usec - start.tv_usec) / 1000);
+
+    // printf("GEN %d           %d        %.0f\n", k+1, localCount, localElapsed);
+    file << localCount << "," << localElapsed << "\n";
   }
 
   printf("GEN %d           %d\n", NUM_GENERATIONS-1, gridCount(grid));
 
   gettimeofday(&end, NULL);
-  ellapsed = (int) (1000 * (end.tv_sec - start.tv_sec) + (end.tv_usec - start.tv_usec) / 1000);
+  elapsed = (int) (1000 * (end.tv_sec - start.tv_sec) + (end.tv_usec - start.tv_usec) / 1000);
 
-  printf("ellapsed time: %.2f\n", ellapsed);
+  printf("elapsed time     %.2f\n", elapsed);
 
   return 0;
 }
