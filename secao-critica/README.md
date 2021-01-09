@@ -1,3 +1,5 @@
+# Atividade  1 - Seção Crítica por espera ocupada
+
 # Compile
 *gcc -fopenmp main.c -o run.o*
 
