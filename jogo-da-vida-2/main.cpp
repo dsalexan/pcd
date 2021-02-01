@@ -26,7 +26,7 @@ int main(int argc, char const *argv[]) {
   if (argc > 1 && strcmp(argv[1], "--critical") > 0 -1) { SUM_MODE = 1; SUM_MODE_TEXT = "critical"; }
   if (argc > 1 && strcmp(argv[1], "--reduction") > 0 -1) { SUM_MODE = 2; SUM_MODE_TEXT = "reduction"; }
 
-  int N = 2048;
+  int N = 12;
   int NUM_GENERATIONS = 15; 
   // 2000 == 146951
   // 15   == 753437
@@ -51,6 +51,11 @@ int main(int argc, char const *argv[]) {
   printf("\n");
 
   printf("GEN 0              %d\n", gridCount(grid));
+
+  int l;
+  for (l = 0; l < 10; l++) {
+    printf("%d\n", rand() %2);
+  }
 
   
   std::ofstream file;
